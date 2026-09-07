@@ -5,6 +5,13 @@ import { paginationSchema } from "@bluelearn/schemas";
 import { Separator } from "@/components/ui/separator";
 import { TodoCard } from "@/components/cards/TodoCard";
 import { Pagination } from "@/components/Pagination";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 
 import { listTodos } from "@/lib/api/todos";
 import { groupTodosByTitle } from "@/lib/groupTodos";
@@ -76,9 +83,21 @@ function RouteComponent() {
   if (groups.length === 0) {
     return (
       <TodosPage>
-        <p className="text-sm text-muted-foreground">
-          No todo guides right now.
-        </p>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia>
+              <img
+                src="/assets/adam/adam-cube-error.png"
+                alt="Adam mascot indicating no todo guides"
+                className="h-40 w-40 grayscale sm:h-56 sm:w-56"
+              />
+            </EmptyMedia>
+            <EmptyTitle className="data-label">No todo guides</EmptyTitle>
+            <EmptyDescription className="data-value">
+              No todo guides right now.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       </TodosPage>
     );
   }
