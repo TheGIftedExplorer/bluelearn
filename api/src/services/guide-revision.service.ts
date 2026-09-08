@@ -471,10 +471,58 @@ export async function updateRevision(
   return { revision, subjects };
 }
 
+// 409 the submit when rival claim is pending/in review.
+async function assertNoCompetingTodoClaim(supabase: DB, revisionId: string) {
+  const { data: rev, error: revError } = await supabase
+    .from("guide_revisions")
+    .select("guide_id")
+    .eq("id", revisionId)
+    .maybeSingle();
+  if (revError || !rev) return;
+
+  const { data: guide, error: guideError } = await supabase
+    .from("guides")
+    .select("guide_base_id")
+    .eq("id", rev.guide_id)
+    .maybeSingle();
+  if (guideError || !guide) return;
+
+  const { data: claims, error: claimsError } = await supabase
+    .from("todo_claims")
+    .select("todo_id")
+    .eq("guide_base_id", guide.guide_base_id);
+  if (claimsError) throw new ServiceError("Unable to submit revision", 400);
+  const todoIds = (claims ?? []).map((c) => c.todo_id);
+  if (todoIds.length === 0) return;
+
+  const { data: todos, error: todosError } = await supabase
+    .from("todo_prerequisites")
+    .select("status")
+    .in("id", todoIds);
+  if (todosError) throw new ServiceError("Unable to submit revision", 400);
+  if ((todos ?? []).some((t) => t.status !== "open")) {
+    throw new ServiceError("This todo has already been fulfilled", 409);
+  }
+
+  const { data: blocked, error: gateError } = await supabase.rpc(
+    "todo_has_open_claim",
+    { p_todo_ids: todoIds, p_exclude_base_id: guide.guide_base_id }
+  );
+  if (gateError) throw new ServiceError("Unable to submit revision", 400);
+  if (blocked) {
+    throw new ServiceError(
+      "Another guide claiming this todo is already in review",
+      409
+    );
+  }
+}
+
 // Submit a draft for review: flips it to submitted, opens a review case, and
 // links the two in one transaction via the submit_guide_revision RPC (RLS still
 // applies). Returns the opened review case id.
 export async function submitRevision(supabase: DB, id: string) {
+  await assertNoCompetingTodoClaim(supabase, id);
+
   const { data: review_case_id, error } = await supabase.rpc(
     "submit_guide_revision",
     {
