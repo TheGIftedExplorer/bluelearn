@@ -38,8 +38,14 @@ coverage/
 
 # AI
 CLAUDE.md
+AGENTS.md
 .claude/
 .superpowers/
 .cursorignore
+.cursor/
+.copilot/
+copilot-instructions.md
+.github/copilot-instructions.md
+session-*.md
 docs/superpowers
 .nitro/
