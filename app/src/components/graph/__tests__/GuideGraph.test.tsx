@@ -1,10 +1,10 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { GuideGraph } from "../GuideGraph";
-import { WalkthroughGraph } from "../WalkthroughGraph";
 import type * as XyflowReact from "@xyflow/react";
 import type { Walkthrough } from "@bluelearn/schemas";
+import { GuideGraph } from "@/components/graph/GuideGraph";
+import { WalkthroughGraph } from "@/components/graph/WalkthroughGraph";
 
 // Mock @xyflow/react to inspect the props passed to Controls and avoid DOM layout measurements in jsdom
 const mockControls = vi.fn();
