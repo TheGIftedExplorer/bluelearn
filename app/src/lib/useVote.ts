@@ -71,9 +71,11 @@ export function useVote(
 
       handleClose?.();
 
-      const delay = (ms: number) =>
-        new Promise((resolve) => setTimeout(resolve, ms));
-      await delay(200);
+      if (submission?.direction === "down") {
+        const delay = (ms: number) =>
+          new Promise((resolve) => setTimeout(resolve, ms));
+        await delay(200);
+      }
 
       setVote(submission);
 
