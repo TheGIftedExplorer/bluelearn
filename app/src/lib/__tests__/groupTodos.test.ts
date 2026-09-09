@@ -2,9 +2,9 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { groupTodosByTitle } from "../groupTodos";
-import { usePagination } from "../usePagination";
 import type { TodoListItem } from "@bluelearn/schemas";
+import { groupTodosByTitle } from "@/lib/groupTodos";
+import { usePagination } from "@/lib/usePagination";
 
 function makeTodoItem(overrides: Partial<TodoListItem> = {}): TodoListItem {
   return {
