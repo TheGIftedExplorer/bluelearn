@@ -83,11 +83,10 @@ async function scheduled(event: ScheduledController, env: Bindings) {
   );
 
   if (event.cron === "*/5 * * * *") {
-    const results = await Promise.allSettled([
+    await Promise.allSettled([
       assemblePendingPanels(supabase),
       sweepExpiredReviewSeats(supabase),
     ]);
-    console.log(results);
   }
   if (event.cron === "0 */12 * * *") await promoteAllCanonicals(supabase);
 }
