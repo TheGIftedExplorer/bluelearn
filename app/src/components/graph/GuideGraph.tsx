@@ -7,9 +7,9 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import { Fullscreen, Minimize } from "lucide-react";
-import { useGraphLayout } from "./useGraphLayout";
 import type { Node, NodeTypes } from "@xyflow/react";
 import type { Walkthrough } from "@bluelearn/schemas";
+import { useGraphLayout } from "@/lib/useGraphLayout";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/lib/themeProvider";
 import "@xyflow/react/dist/style.css";
