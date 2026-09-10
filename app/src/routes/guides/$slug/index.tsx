@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 
 import { buildBreadcrumbs } from "@/lib/breadcrumbs";
 import { getGuide } from "@/lib/api/guides";
+import { buildGuideMeta } from "@/lib/guideUtils";
 
 import "katex/dist/katex.min.css";
 import { GuideSidebar } from "@/components/sidebar/GuideSidebar";
@@ -46,6 +47,9 @@ export const Route = createFileRoute("/guides/$slug/")({
       throw notFound();
     }
   },
+  head: ({ loaderData }) => ({
+    meta: loaderData ? buildGuideMeta(loaderData) : [], // Metadata
+  }),
   component: RouteComponent,
 });
 
