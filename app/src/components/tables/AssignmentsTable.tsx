@@ -194,7 +194,7 @@ export const AssignmentsTable = ({
                 </TableCell>
 
                 <TableCell className="w-[350px] max-w-[350px] px-4 py-3 break-words whitespace-normal">
-                  {assignment.change_summary}
+                  {assignment.change_summary || "—"}
                 </TableCell>
 
                 <TableCell className="mono-micro w-[140px] px-4 py-3 whitespace-pre-line">
