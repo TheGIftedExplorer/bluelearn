@@ -475,22 +475,20 @@ export async function updateRevision(
 async function assertNoCompetingTodoClaim(supabase: DB, revisionId: string) {
   const { data: rev, error: revError } = await supabase
     .from("guide_revisions")
-    .select("guide_id")
+    .select(
+      "guide_id, guides!guide_revisions_guide_id_fkey!inner(guide_base_id)"
+    )
     .eq("id", revisionId)
     .maybeSingle();
-  if (revError || !rev) return;
-
-  const { data: guide, error: guideError } = await supabase
-    .from("guides")
-    .select("guide_base_id")
-    .eq("id", rev.guide_id)
-    .maybeSingle();
-  if (guideError || !guide) return;
+  if (revError || !rev) {
+    throw new ServiceError("Revision not found or not an editable draft", 404);
+  }
+  const baseId = rev.guides.guide_base_id;
 
   const { data: claims, error: claimsError } = await supabase
     .from("todo_claims")
     .select("todo_id")
-    .eq("guide_base_id", guide.guide_base_id);
+    .eq("guide_base_id", baseId);
   if (claimsError) throw new ServiceError("Unable to submit revision", 400);
   const todoIds = (claims ?? []).map((c) => c.todo_id);
   if (todoIds.length === 0) return;
@@ -506,7 +504,7 @@ async function assertNoCompetingTodoClaim(supabase: DB, revisionId: string) {
 
   const { data: blocked, error: gateError } = await supabase.rpc(
     "todo_has_open_claim",
-    { p_todo_ids: todoIds, p_exclude_base_id: guide.guide_base_id }
+    { p_todo_ids: todoIds, p_exclude_base_id: baseId }
   );
   if (gateError) throw new ServiceError("Unable to submit revision", 400);
   if (blocked) {
