@@ -641,7 +641,9 @@ export default function EditorToolbar({
                       ? "Switch to Rich Text Mode"
                       : "Switch to Source Mode"
                   }
-                  className={isSourceMode ? "bg-accent text-accent-foreground" : ""}
+                  className={
+                    isSourceMode ? "bg-accent text-accent-foreground" : ""
+                  }
                 >
                   {isSourceMode ? <Eye /> : <Code />}
                 </button>
@@ -738,7 +740,9 @@ export default function EditorToolbar({
                 <button
                   type="button"
                   className={`toolbar-popover-item ${
-                    isSourceMode ? "bg-accent font-semibold text-accent-foreground" : ""
+                    isSourceMode
+                      ? "bg-accent font-semibold text-accent-foreground"
+                      : ""
                   }`}
                   onClick={toggleSourceMode}
                 >
@@ -747,9 +751,7 @@ export default function EditorToolbar({
                   ) : (
                     <Code className="h-3.5 w-3.5 text-muted-foreground" />
                   )}
-                  <span>
-                    {isSourceMode ? "Rich Text Mode" : "Source Mode"}
-                  </span>
+                  <span>{isSourceMode ? "Rich Text Mode" : "Source Mode"}</span>
                 </button>
 
                 <div className="my-1 h-px bg-border" />
