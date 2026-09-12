@@ -189,10 +189,10 @@ function RouteComponent() {
                     : null
                 }
                 onSubmit={async (reason, note) => {
-                  if (await downvote(reason, note)) setDownvoteOpen(false);
+                  await downvote(reason, note, () => setDownvoteOpen(false));
                 }}
                 onRemove={async () => {
-                  if (await removeVote()) setDownvoteOpen(false);
+                  await removeVote(() => setDownvoteOpen(false));
                 }}
               />
 
@@ -203,6 +203,7 @@ function RouteComponent() {
                 guideTitle={guide.title}
                 menuItems={guideMenuItems}
                 prerequisites={guide.prerequisites}
+                todoPrerequisites={guide.todo_prerequisites}
                 isOfficial={guide.is_official}
               />
 
