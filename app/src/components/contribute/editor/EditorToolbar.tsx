@@ -38,6 +38,7 @@ import {
   MoreHorizontal,
   Plus,
   Quote,
+  SquareDashedText,
   Table,
   Type,
   Upload,
@@ -645,7 +646,7 @@ export default function EditorToolbar({
                     isSourceMode ? "bg-accent text-accent-foreground" : ""
                   }
                 >
-                  {isSourceMode ? <Eye /> : <Code />}
+                  {isSourceMode ? <SquareDashedText /> : <Code />}
                 </button>
               </TooltipTrigger>
 
