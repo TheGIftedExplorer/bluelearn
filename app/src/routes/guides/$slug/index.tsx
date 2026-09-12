@@ -199,6 +199,7 @@ function RouteComponent() {
                 guideTitle={guide.title}
                 menuItems={guideMenuItems}
                 prerequisites={guide.prerequisites}
+                todoPrerequisites={guide.todo_prerequisites}
                 isOfficial={guide.is_official}
               />
 
