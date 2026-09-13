@@ -6,7 +6,6 @@ import type {
   ContributionType,
   GuideContribution,
 } from "@/types/contributions";
-
 import { StepperActionHeader } from "@/components/contribute/StepperActionHeader";
 import {
   Field,
@@ -16,10 +15,17 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox";
+
+const DISCLAIMER_OPTIONS = [
+  { value: "medical", label: "Medical" },
+  { value: "financial", label: "Financial" },
+  { value: "legal", label: "Legal" },
+  { value: "mature", label: "Mature age-restricted 18+ content" },
+  { value: "profanity", label: "Profanity" },
+];
 
 type SubjectOption = { id: string; name: string };
 type GuideOption = {
@@ -164,8 +170,8 @@ export const GuideDetails = ({
             id="title"
             type="text"
             autoComplete="Title"
-            maxLength={50}
-            placeholder="Choose a title. (Maximum 50 characters)."
+            maxLength={100}
+            placeholder="Choose a title. (Maximum 100 characters)."
             className="h-10 rounded-md"
             required
             value={guideContData.title}
@@ -194,6 +200,7 @@ export const GuideDetails = ({
           <textarea
             className="h-32 w-full min-w-0 resize-none rounded-md border border-input bg-input/20 p-2 text-sm transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 md:text-xs/relaxed dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
             rows={4}
+            maxLength={500}
             placeholder="Write a summary for your guide."
             required
             value={guideContData.summary}
@@ -348,6 +355,29 @@ export const GuideDetails = ({
             ))}
           </div>
         )}
+
+        <Field className="space-y-2">
+          <div className="space-y-1">
+            <FieldLabel className="font-mono tracking-[0.08em] uppercase">
+              Disclaimers
+            </FieldLabel>
+            <FieldDescription className="text-xs">
+              Select content-category disclaimers that apply to this guide.
+            </FieldDescription>
+          </div>
+
+          <Combobox
+            multiple
+            items={DISCLAIMER_OPTIONS}
+            value={guideContData.disclaimers}
+            onValueChange={(disclaimers) =>
+              setGuideContData((prev) => ({
+                ...prev,
+                disclaimers: disclaimers as GuideContribution["disclaimers"],
+              }))
+            }
+          />
+        </Field>
 
         {showPrerequisiteFields && (
           <>

@@ -6,13 +6,17 @@ import {
 import { contributorSchema } from "../identity/responses";
 import { fieldDiffSchema, revisionRefSchema } from "../diff";
 import {
+  disclaimerSchema,
   downvoteReasonSchema,
   guideStatusSchema,
   knowledgeTypeSchema,
   revisionStatusSchema,
   voteDirectionSchema,
 } from "./enums";
-import { guideReferenceSchema } from "./references";
+import {
+  guideReferenceSchema,
+  todoPrerequisiteReferenceSchema,
+} from "./references";
 export const guideSchema = z.object({
   slug: z.string(),
   variant_id: z.string().nullable(),
@@ -26,7 +30,10 @@ export const guideSchema = z.object({
   created_at: z.iso.datetime({ offset: true }),
   tags: z.array(subjectReferenceSchema),
   prerequisites: z.array(guideReferenceSchema),
+  follow_ups: z.array(guideReferenceSchema).optional(),
+  todo_prerequisites: z.array(todoPrerequisiteReferenceSchema),
   is_official: z.boolean(),
+  disclaimers: z.array(disclaimerSchema),
 });
 export const walkthroughSchema = z.object({
   nodes: z.array(
@@ -119,6 +126,7 @@ export const variantSchema = z.object({
     })
     .nullable(),
   votes: guideVotesSchema,
+  disclaimers: z.array(disclaimerSchema),
 });
 
 export const voteSchema = z.object({
@@ -204,6 +212,7 @@ export const guideRevisionDetailResponseSchema = z.strictObject({
   prerequisites: z.array(z.string()),
   todos: z.array(z.object({ title: z.string(), summary: z.string() })),
   revised_from_case_id: z.uuid().nullable(),
+  disclaimers: z.array(disclaimerSchema),
 });
 
 export const guideRevisionUpdateResponseSchema = z.strictObject({
