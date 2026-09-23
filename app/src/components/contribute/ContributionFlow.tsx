@@ -491,6 +491,26 @@ function Inner({
     step
   );
 
+  // whether the active contribution has edits that haven't been saved yet
+  const isDirty =
+    type === "guide"
+      ? guideSave.isDirty
+      : type === "variant"
+        ? variantSave.isDirty
+        : type === "objective"
+          ? objectiveSave.isDirty
+          : false;
+
+  // whether the locally saved content is confirmed saved to the server too
+  const isSynced =
+    type === "guide"
+      ? guideSave.isSynced
+      : type === "variant"
+        ? variantSave.isSynced
+        : type === "objective"
+          ? objectiveSave.isSynced
+          : true;
+
   const [submitting, setSubmitting] = useState(false);
 
   const [publishAttempted, setPublishAttempted] = useState(false);
@@ -978,6 +998,8 @@ function Inner({
             )
           );
         }
+
+        guideSave.markSynced();
       }
 
       if (type === "variant") {
@@ -988,6 +1010,8 @@ function Inner({
           id,
           step
         );
+
+        variantSave.markSynced();
       }
 
       if (type === "objective") {
@@ -998,6 +1022,8 @@ function Inner({
           id,
           step
         );
+
+        objectiveSave.markSynced();
       }
 
       toast.success("Draft saved");
@@ -1274,6 +1300,8 @@ function Inner({
           hideBackBtn={skipTypeStep}
           onSaveDraft={saveDraft}
           submitting={submitting}
+          isDirty={isDirty}
+          isSynced={isSynced}
         />
 
         <PreviewGuide
@@ -1288,6 +1316,8 @@ function Inner({
           onSaveDraft={saveDraft}
           onPublish={publish}
           submitting={submitting}
+          isDirty={isDirty}
+          isSynced={isSynced}
         />
 
         <VariantInfo
@@ -1302,6 +1332,8 @@ function Inner({
           hideBackBtn={skipTypeStep}
           onSaveDraft={saveDraft}
           submitting={submitting}
+          isDirty={isDirty}
+          isSynced={isSynced}
         />
 
         <PreviewVariant
@@ -1312,6 +1344,8 @@ function Inner({
           onSaveDraft={saveDraft}
           onPublish={publish}
           submitting={submitting}
+          isDirty={isDirty}
+          isSynced={isSynced}
         />
 
         <ObjectiveDetails
@@ -1325,6 +1359,8 @@ function Inner({
           hideBackBtn={skipTypeStep}
           onSaveDraft={saveDraft}
           submitting={submitting}
+          isDirty={isDirty}
+          isSynced={isSynced}
         />
 
         <OrderTargetGuides
@@ -1333,6 +1369,8 @@ function Inner({
           setObjectiveContData={setObjectiveContData}
           onSaveDraft={saveDraft}
           submitting={submitting}
+          isDirty={isDirty}
+          isSynced={isSynced}
           guides={guideOptions}
         />
 
@@ -1342,6 +1380,8 @@ function Inner({
           setObjectiveContData={setObjectiveContData}
           onSaveDraft={saveDraft}
           submitting={submitting}
+          isDirty={isDirty}
+          isSynced={isSynced}
           guides={guideOptions}
         />
 
@@ -1351,6 +1391,8 @@ function Inner({
           onSaveDraft={saveDraft}
           onPublish={publish}
           submitting={submitting}
+          isDirty={isDirty}
+          isSynced={isSynced}
           guideOptions={guideOptions}
           subjectOptions={subjectOptions}
         />
